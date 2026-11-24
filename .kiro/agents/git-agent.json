@@ -1,0 +1,5 @@
+{
+  "name": "git-agent",
+  "description": "Automates Git workflow tasks: branching, committing, pushing, and pull request management following the Agentic SDLC course conventions.",
+  "version": "1.0.0"
+}
