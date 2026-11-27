@@ -1,0 +1,44 @@
+@startuml runtime-successful-run
+title Mars Rover Simulator - Successful Run
+
+actor "Mission Operator" as operator
+participant "Mission Control\n(mission_control.py)" as mc
+participant "Terrain\n(terrain.py)" as terrain
+participant "Navigation\n(navigation.py)" as nav
+
+operator -> mc : python src/mission_control.py mission.txt
+activate mc
+
+mc -> mc : read and parse input file\n(3 or 4 groups)
+mc -> terrain : Grid(width=10, height=10, obstacles={(2,4),(3,7)})
+activate terrain
+terrain --> mc : grid
+deactivate terrain
+
+mc -> nav : Rover(x=0, y=0, direction=N, grid)
+activate nav
+nav --> mc : rover
+deactivate nav
+
+mc -> nav : rover.execute(commands="FFRFF")
+activate nav
+
+loop for each command in "FFRFF"
+    alt command is F
+        nav -> terrain : grid.is_free(target_x, target_y)
+        activate terrain
+        terrain --> nav : True
+        deactivate terrain
+        nav -> nav : update position
+    else command is R or L
+        nav -> nav : rotate heading 90°
+    end
+end
+
+nav --> mc : (final_state=(2,2,E), blocked_events=[])
+deactivate nav
+
+mc -> operator : "2 2 E"
+deactivate mc
+
+@enduml

@@ -1,0 +1,11 @@
+@startuml c4-context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Mars Rover Simulator - System Context
+
+Person(operator, "Mission Operator", "Prepares the input file with the grid, obstacles, rover starting state, and commands; reads the final position and direction from stdout")
+System(simulator, "Mars Rover Simulator", "Parses the input file, executes move and turn commands on the grid, checks for obstacles, and prints the rover's final position and direction")
+
+Rel(operator, simulator, "Runs with an input file path, reads the final position and direction", "CLI (Docker), plain-text file, stdout")
+
+@enduml
