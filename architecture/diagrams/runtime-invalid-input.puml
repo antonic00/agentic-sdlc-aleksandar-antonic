@@ -1,0 +1,16 @@
+@startuml runtime-invalid-input
+title Mars Rover Simulator - Invalid Input
+
+actor "Mission Operator" as operator
+participant "Mission Control\n(mission_control.py)" as mc
+
+operator -> mc : python src/mission_control.py mission.txt
+activate mc
+
+mc -> mc : read input file
+mc -> mc : parse groups —\nvalidation fails\n(e.g. wrong group count,\nobstacle out of bounds,\nunknown command character)
+
+mc -> operator : stderr: "Error: <description>"\nexit code 1
+deactivate mc
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml c4-container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Mars Rover Simulator - Container Diagram
+
+Person(operator, "Mission Operator", "Runs the simulator with an input file; reads the result from stdout")
+
+System_Boundary(simulator, "Mars Rover Simulator") {
+    Container(app, "Rover CLI", "Python 3.12", "Parses the input file, executes rover commands on the grid, and prints the final position and direction to stdout. Holds all state (Grid, Rover) in memory for one run.")
+}
+
+Rel(operator, app, "Runs with input file path as argument", "CLI (Docker)")
+Rel(app, operator, "Prints final position, direction, and any blocked positions", "stdout")
+
+@enduml

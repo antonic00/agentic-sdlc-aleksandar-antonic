@@ -1,0 +1,20 @@
+@startuml c4-component-rover-cli
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Mars Rover Simulator - Rover CLI Components
+
+Person(operator, "Mission Operator", "Runs the simulator with an input file; reads the result from stdout")
+
+Container_Boundary(app, "Rover CLI") {
+    Component(mc, "Mission Control", "Python module: mission_control", "Entry point. Reads the input file, delegates parsing, constructs Grid and Rover, runs the simulation, formats and prints the result.")
+    Component(nav, "Navigation", "Python module: navigation", "Owns Rover state (position, heading). Executes F, R, L commands. Asks Terrain whether a target cell is free before moving.")
+    Component(terrain, "Terrain", "Python module: terrain", "Owns Grid dimensions and obstacle positions. Applies toroidal edge wrapping. Answers whether a given cell is free.")
+}
+
+Rel(operator, mc, "Passes input file path as CLI argument", "sys.argv")
+Rel(mc, nav, "Constructs Rover; calls rover.execute(commands)")
+Rel(mc, terrain, "Constructs Grid with dimensions and obstacle list")
+Rel(nav, terrain, "Calls is_free(x, y) before each forward move")
+Rel(mc, operator, "Prints final position, direction, and BLOCKED lines", "stdout")
+
+@enduml

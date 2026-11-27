@@ -3,9 +3,9 @@
 
 title Mars Rover Simulator - System Context
 
-Person(operator, "Mission Operator", "Provides the rover's starting position and direction, the map with obstacles, and the list of commands")
-System(simulator, "Mars Rover Simulator", "Executes move and turn commands on a map with obstacles and reports the rover's final position and direction")
+Person(operator, "Mission Operator", "Prepares the input file with the grid, obstacles, rover starting state, and commands; reads the final position and direction from stdout")
+System(simulator, "Mars Rover Simulator", "Parses the input file, executes move and turn commands on the grid, checks for obstacles, and prints the rover's final position and direction")
 
-Rel(operator, simulator, "Sends map and commands, receives final position and direction", "Text via command line")
+Rel(operator, simulator, "Runs with an input file path, reads the final position and direction", "CLI (Docker), plain-text file, stdout")
 
 @enduml

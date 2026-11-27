@@ -1,0 +1,53 @@
+@startuml runtime-blocked-move
+title Mars Rover Simulator - Blocked Forward Move
+
+actor "Mission Operator" as operator
+participant "Mission Control\n(mission_control.py)" as mc
+participant "Terrain\n(terrain.py)" as terrain
+participant "Navigation\n(navigation.py)" as nav
+
+operator -> mc : python src/mission_control.py mission.txt
+activate mc
+
+mc -> mc : read and parse input file
+mc -> terrain : Grid(width=10, height=10, obstacles={(0,2)})
+activate terrain
+terrain --> mc : grid
+deactivate terrain
+
+mc -> nav : Rover(x=0, y=0, direction=N, grid)
+activate nav
+nav --> mc : rover
+deactivate nav
+
+mc -> nav : rover.execute(commands="FFF")
+activate nav
+
+note over nav : Command 1: F
+nav -> terrain : grid.is_free(0, 1)
+activate terrain
+terrain --> nav : True
+deactivate terrain
+nav -> nav : move to (0,1)
+
+note over nav : Command 2: F
+nav -> terrain : grid.is_free(0, 2)
+activate terrain
+terrain --> nav : False  [obstacle]
+deactivate terrain
+nav -> nav : record BLOCKED event (0,2,N)\nstay at (0,1)
+
+note over nav : Command 3: F
+nav -> terrain : grid.is_free(0, 2)
+activate terrain
+terrain --> nav : False  [obstacle]
+deactivate terrain
+nav -> nav : record BLOCKED event (0,2,N)\nstay at (0,1)
+
+nav --> mc : (final_state=(0,1,N), blocked_events=[(0,2,N),(0,2,N)])
+deactivate nav
+
+mc -> operator : "BLOCKED 0 2 N\nBLOCKED 0 2 N\n0 1 N"
+deactivate mc
+
+@enduml
