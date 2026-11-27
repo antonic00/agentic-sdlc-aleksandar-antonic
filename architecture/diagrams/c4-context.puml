@@ -1,0 +1,11 @@
+@startuml c4-context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Mars Rover Simulator - System Context
+
+Person(operator, "Mission Operator", "Provides the rover's starting position and direction, the map with obstacles, and the list of commands")
+System(simulator, "Mars Rover Simulator", "Executes move and turn commands on a map with obstacles and reports the rover's final position and direction")
+
+Rel(operator, simulator, "Sends map and commands, receives final position and direction", "Text via command line")
+
+@enduml
